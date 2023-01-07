@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  drupal:
+    #image: 'drupal:9.4.8-php8.1-apache-buster'
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports: 
+      - 80:80
+    volumes:
+      - ./volumes/drupal:/opt/drupal
+    depends_on:
+      - mysql
+  mysql:
+    image: mariadb
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql

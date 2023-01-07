@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+
+  wordpress:
+    image: 'wordpress:php8.1-apache'
+    restart: always
+    ports:
+      - 80:80
+    env_file:
+      - .env
+    volumes:
+       - ./volumes/wordpress:/var/www/html
+    depends_on:
+      - wordpress_db
+
+  wordpress_db:
+    image: mariadb
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - wordpress_db
